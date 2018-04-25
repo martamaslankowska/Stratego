@@ -60,8 +60,8 @@ def writePlayerColor(player_name, text_reg):
 
 # Initialize the game engine
 pygame.init()
-n = 5
-grid_size = 70
+n = 6
+grid_size = 50
 x_start, y_start = int(grid_size/2), grid_size
 grid, w = boardInit(n, grid_size)
 
