@@ -40,7 +40,7 @@ COLORP2_LIGHT = (255, 128, 190)
 ''' Used variables '''
 n = 6
 field_size = 70
-panel_size = 350, 250
+panel_size = 400, 250
 matrix = init_matrix(n, field_size)
 board_margin = int(field_size/2)
 
@@ -55,12 +55,16 @@ font_semibold_60 = pygame.font.SysFont("Lato Semibold", 60)
 countdown_color_text = BLACK
 countdown_color_background = GRAY
 
+font_semibold_30 = pygame.font.SysFont("Lato Semibold", 30)
+font_30 = pygame.font.SysFont("Lato", 30)
+font_bold_30 = pygame.font.SysFont("Lato Black", 30)
+
 
 ''' Game variables '''
 
 player1 = Player("Marta", COLORP1)
 player2 = Player("Basia", COLORP2)
-session_time = 13
+session_time = 10
 
 game = Game(matrix, player1, player2)
 

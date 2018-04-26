@@ -4,6 +4,8 @@ class Player:
     def __init__(self, name, color):
         self.name = name
         self.color = color
+        self.score = 0
+
         self.nr = Player.number
         Player.number += 1
 
