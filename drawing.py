@@ -30,28 +30,54 @@ def count_score(field):
 
     # checking from left to right
     for i in range(n):
-        fields_lr.append(matrix[field.i][i])
+        if matrix[field.i][i].color != WHITE:
+            fields_lr.append(matrix[field.i][i])
     if len(fields_lr) == n:
         scored += count_line(field, fields_lr)
 
     # checking from up to down
     for i in range(n):
-        fields_ud.append(matrix[i][field.j])
+        if matrix[i][field.j].color != WHITE:
+            fields_ud.append(matrix[i][field.j])
     if len(fields_ud) == n:
         scored += count_line(field, fields_ud)
 
+    fx, fy = field.i, field.j
 
-    # # checking from left-up to right-down
-    # for i in range(n):
-    #
-    #     scored = count_line(field, fields_lurd)
-    #
-    # # checking from right-up to left-down
-    # for i in range(n):
-    #
-    #     scored = count_line(field, fields_ruld)
+    # checking from left-up to right-down
+    tmp_x, tmp_y = fx, fy
+    for i in range(field.n_lu):
+        tmp_x, tmp_y = tmp_x - 1, tmp_y - 1
+        if matrix[tmp_x][tmp_y].color != WHITE:
+            fields_lurd = [matrix[tmp_x][tmp_y]] + fields_lurd
+    fields_lurd.append(field)
+    tmp_x, tmp_y = fx, fy
+    for i in range(field.n_rd):
+        tmp_x, tmp_y = tmp_x + 1, tmp_y + 1
+        if matrix[tmp_x][tmp_y].color != WHITE:
+            fields_lurd.append(matrix[tmp_x][tmp_y])
 
-    print('For field ({0},{1}) - {2} and {3}'.format(field.i, field.j, count_line(field, fields_lr), count_line(field, fields_ud)))
+    if len(fields_lurd) == (field.n_lu + 1 + field.n_rd):
+        scored += count_line(field, fields_lurd)
+
+    # checking from right-up to left-down
+    tmp_x, tmp_y = fx, fy
+    for i in range(field.n_ld):
+        tmp_x, tmp_y = tmp_x - 1, tmp_y + 1
+        if matrix[tmp_x][tmp_y].color != WHITE:
+            fields_ruld = [matrix[tmp_x][tmp_y]] + fields_ruld
+    fields_ruld.append(field)
+    tmp_x, tmp_y = fx, fy
+    for i in range(field.n_ru):
+        tmp_x, tmp_y = tmp_x + 1, tmp_y - 1
+        if matrix[tmp_x][tmp_y].color != WHITE:
+            fields_ruld.append(matrix[tmp_x][tmp_y])
+
+    if len(fields_ruld) == (field.n_ru + 1 + field.n_ld):
+        scored += count_line(field, fields_ruld)
+
+    print('For field ({0},{1}) - {2} and {3} | {4} and {5}'.
+          format(field.i, field.j, count_line(field, fields_lr), count_line(field, fields_ud), count_line(field, fields_lurd), count_line(field, fields_ruld)))
     return scored
 
 
@@ -124,6 +150,7 @@ def draw_players(txt, score):
     pygame.draw.rect(screen, COLORP1_LIGHT, [width - panel_size[0] + 45, board_margin + 158, panel_size[0]-90, 50])
     pygame.draw.rect(screen, COLORP2_LIGHT, [width - panel_size[0] + 45, board_margin + 215, panel_size[0]-90, 50])
 
+    # PLAYER NAMES
     pl1 = font_30.render(game.players[0].name, True, BLACK)
     pos1 = width - panel_size[0] + 55 + txt.get_rect().centerx - pl1.get_rect().centerx, board_margin + 163
     pl2 = font_30.render(game.players[1].name, True, BLACK)
@@ -134,6 +161,7 @@ def draw_players(txt, score):
     pygame.draw.line(screen, COLORP2, [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 222],
                      [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 258], 2)
 
+    # PLAYER SCORES
     pl1_score = font_30.render(str(game.players[0].score), True, BLACK)
     pos1_score = width - 45 - score.get_rect().centerx*2 - 17 + score.get_rect().centerx - pl1_score.get_rect().centerx, board_margin + 163
     pl2_score = font_30.render(str(game.players[1].score), True, BLACK)
@@ -153,7 +181,7 @@ def draw_active_player(pl1, pl2, pl1_s, pl2_s):
         pl1_s = font_bold_30.render(str(game.players[0].score), True, BLACK)
     if game.active_player == game.players[1]:
         pl2 = font_bold_30.render(game.players[1].name, True, BLACK)
-        pl2_s = font_bold_30.render(str(game.players[0].score), True, BLACK)
+        pl2_s = font_bold_30.render(str(game.players[1].score), True, BLACK)
     return pl1, pl2, pl1_s, pl2_s
 
 
