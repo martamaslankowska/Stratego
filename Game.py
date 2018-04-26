@@ -16,4 +16,16 @@ class Game:
         return self.active_player
 
 
+    def points_scored(self, field):
+
+        pass
+
+
+    def line_score(self, fields):
+        pass
+
+
+
+
+
 # Game.init_matrix(8, 50)
