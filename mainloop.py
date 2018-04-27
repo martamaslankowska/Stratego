@@ -130,8 +130,8 @@ def starting_screen():
         pygame.draw.rect(loc_screen, color_p2, p2_input_box, 4 if active_p2 else 2)
 
         # Blit button
-        pygame.draw.rect(loc_screen, GRAY, button)
-        pygame.draw.rect(loc_screen, BLACK, button, 2)
+        pygame.draw.rect(loc_screen, LIGHTGRAY, button)
+        pygame.draw.rect(loc_screen, DARKGRAY, button, 3)
         loc_screen.blit(txt_button, (button.centerx - int(txt_button.get_rect().width / 2), 310))
         # Blit the main text
         loc_screen.blit(txt, (int(sw / 2) - int(txt.get_rect().width / 2), 50))
@@ -197,13 +197,17 @@ def two_player_game(done, sec_counter, ses_time, previous_time, countdown, count
     pygame.quit()
 
 
+def set_player_names():
+    done_play = False
+    p1_name, p2_name = starting_screen()
+    if p1_name == '' or p2_name == '':
+        done_play = True
+    else:
+        game.players[0].name, game.players[1].name = p1_name, p2_name
+    return done_play
 
-# p1_name, p2_name = starting_screen()
-# if p1_name == '' or p2_name == '':
-#     done_playing = True
-# else:
-#     game.players[0].name, game.players[1].name = p1_name, p2_name
 
+done_playing = set_player_names()
 two_player_game(done_playing, sec_counter, ses_time, previous_time, countdown, count_color_text, count_color_back)
 
 

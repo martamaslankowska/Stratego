@@ -11,6 +11,7 @@ import copy
     text_plain()
     draw_players()
     draw_active_player()
+    draw_finishing_box()
 '''
 
 
