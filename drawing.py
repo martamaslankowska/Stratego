@@ -5,14 +5,6 @@ from Game import *
 import copy
 
 
-''' DRAW STARTING SCREEN
-'''
-
-
-def draw_starting_players():
-    pass
-
-
 ''' DRAW BOARD AND PANEL 
     draw_panel_line()
     draw_board()
@@ -83,6 +75,37 @@ def draw_active_player(pl1, pl2, pl1_s, pl2_s):
         pl2 = font_bold_30.render(game.players[1].name, True, BLACK)
         pl2_s = font_bold_30.render(str(game.players[1].score), True, BLACK)
     return pl1, pl2, pl1_s, pl2_s
+
+
+def draw_finishing_box():
+    background = pygame.Surface((width, height), pygame.SRCALPHA, 32)
+    background.fill((255, 255, 255, 150))
+    screen.blit(background, (0, 0))
+
+    local_width, local_height = 420, 200
+    local_x, local_y = int(width / 2) - int(local_width/2), int(height / 2) - int(local_height/2)
+
+    box = pygame.Rect(local_x, local_y, local_width, local_height)
+    pygame.draw.rect(screen, (180, 180, 180), box)
+    pygame.draw.rect(screen, (90, 90, 90), box, 5)
+
+    winner_text = ' wins!'
+    if game.players[0].score > game.players[1].score:
+        winner_text = game.players[0].name + winner_text
+    elif game.players[1].score > game.players[0].score:
+        winner_text = game.players[1].name + winner_text
+    else:
+        winner_text = 'We have a tie :)'
+    score_text = str(game.players[0].score) + ' : ' + str(game.players[1].score) \
+        if game.players[0].score > game.players[1].score else str(game.players[1].score) + ' : ' + str(game.players[0].score)
+
+    winner = font_bold_48.render(winner_text, True, BLACK)
+    score = font_semibold_48.render(score_text, True, BLACK)
+
+    screen.blit(winner, (local_x + int(local_width/2) - int(winner.get_rect().width/2), local_y + 35))
+    screen.blit(score, (local_x + int(local_width/2) - int(score.get_rect().width/2), local_y+100))
+
+    pass
 
 
 ''' COUNTDOWN (SESSION TIME) 

@@ -10,6 +10,7 @@ class Game:
         self.field_size = self.matrix[0][0].field_size
         self.active_player = self.players[0]
         self.next_player = self.players[1]
+        self.empty_fields_left = self.n*self.n
 
     def change_active_player(self):
         self.next_player = self.active_player
@@ -102,6 +103,8 @@ class Game:
     def field_and_player_change(self, field):
         self.active_player.score += self.count_score(field)
         self.change_active_player()
+        self.empty_fields_left -= 1
+        print(self.empty_fields_left)
 
     def session_time_expired(self):
         self.active_player = self.next_player

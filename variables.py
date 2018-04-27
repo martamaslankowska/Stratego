@@ -32,6 +32,8 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 GRAY = (128, 128, 128)
+LIGHTGRAY = (183, 183, 183)
+DARKGRAY = (91, 91, 91)
 COLORP1 = (50, 215, 255)
 COLORP1_LIGHT = (128, 230, 255)
 COLORP2 = (255, 75, 165)
@@ -39,7 +41,7 @@ COLORP2_LIGHT = (255, 128, 190)
 
 
 ''' Used variables '''
-n = 6
+n = 3
 field_size = 70
 panel_size = 400, 350
 matrix = init_matrix(n, field_size)
@@ -60,6 +62,9 @@ font_semibold_30 = pygame.font.SysFont("Lato Semibold", 30)
 font_semibold_24 = pygame.font.SysFont("Lato Semibold", 24)
 font_30 = pygame.font.SysFont("Lato", 30)
 font_bold_30 = pygame.font.SysFont("Lato Black", 30)
+
+font_bold_48 = pygame.font.SysFont("Lato Black", 48)
+font_semibold_48 = pygame.font.SysFont("Lato Semibold", 48)
 
 
 ''' Game variables '''

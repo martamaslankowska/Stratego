@@ -161,9 +161,10 @@ def two_player_game(done, sec_counter, ses_time, previous_time, countdown, count
             if event.type == pygame.QUIT:  # If user clicked close
                 done = True  # Flag that we are done so we exit this loop
             if event.type == pygame.USEREVENT:
-                previous_time = ses_time
-                ses_time, countdown = watch_session_time(ses_time, game.active_player)
-                sec_counter = 0
+                if game.empty_fields_left > 0:
+                    previous_time = ses_time
+                    ses_time, countdown = watch_session_time(ses_time, game.active_player)
+                    sec_counter = 0
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     field = game.field_color_change(x, y, board_margin)
@@ -188,14 +189,21 @@ def two_player_game(done, sec_counter, ses_time, previous_time, countdown, count
         ap, s = text_plain()
         draw_players(ap, s)
 
+        if game.empty_fields_left == 0:
+            draw_finishing_box()
+
         pygame.display.flip()
 
     pygame.quit()
 
-p1_name, p2_name = starting_screen()
-if p1_name == '' or p2_name == '':
-    done_playing = True
-else:
-    game.players[0].name, game.players[1].name = p1_name, p2_name
+
+
+# p1_name, p2_name = starting_screen()
+# if p1_name == '' or p2_name == '':
+#     done_playing = True
+# else:
+#     game.players[0].name, game.players[1].name = p1_name, p2_name
 
 two_player_game(done_playing, sec_counter, ses_time, previous_time, countdown, count_color_text, count_color_back)
+
+
