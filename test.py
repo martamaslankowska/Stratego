@@ -3,8 +3,11 @@ from variables import *
 
 pygame.init()
 
+
+
 def main():
-    screen = pygame.display.set_mode((640, 480))
+    sw, sh = 600, 400
+    screen = pygame.display.set_mode((sw, sh))
     font_p1, font_p2 = font_30, font_30
     p1_input_box = pygame.Rect(screen.get_rect().centerx - 100, 140, 200, 45)
     p2_input_box = pygame.Rect(screen.get_rect().centerx - 100, 200, 200, 45)
@@ -23,8 +26,9 @@ def main():
     text_p1, text_p2 = '', ''
 
     text = 'Enter player names and play!'
-    text_button = 'play'
-    button = pygame.Rect(screen.get_rect().centerx - 100, 140, 200, 45)
+    text_button = 'start game'
+    button = pygame.Rect(screen.get_rect().centerx - 85, 300, 170, 50)
+    draw_line = False
 
     done = False
 
@@ -55,32 +59,46 @@ def main():
                 color_p2 = color_active_p2 if active_p2 else color_inactive_p2
                 font_p2 = font_semibold_30 if active_p2 else font_30
 
+                if button.collidepoint(event.pos):
+                    if text_p1 == '' or text_p2 == '':
+                        draw_line = True
+                    else:
+                        done = True
+
             if event.type == pygame.KEYDOWN:
                 if active_p1:
-                    # if event.key == pygame.K_RETURN:
-                    #     print(text_p1)
-                    #     text_p1 = ''
-                    if event.key == pygame.K_BACKSPACE:
+                    if event.key == pygame.K_RETURN or event.key == pygame.K_TAB:
+                        pass
+                    elif event.key == pygame.K_BACKSPACE:
                         text_p1 = text_p1[:-1]
                     else:
                         text_p1 += event.unicode
                 if active_p2:
-                    # if event.key == pygame.K_RETURN:
-                    #     print(text_p2)
-                    #     text_p2 = ''
-                    if event.key == pygame.K_BACKSPACE:
+                    if event.key == pygame.K_RETURN:
+                        pass
+                    elif event.key == pygame.K_BACKSPACE:
                         text_p2 = text_p2[:-1]
                     else:
                         text_p2 += event.unicode
 
+                if event.key == pygame.K_RETURN or event.key == pygame.K_TAB:
+                    if text_p1 == '' or text_p2 == '':
+                        draw_line = True
+                    else:
+                        done = True
+
 
         screen.fill(WHITE)
+
+        # Main text
+        txt = font_semibold_30.render(text, True, BLACK)
+        txt_button = font_semibold_24.render(text_button, True, BLACK)
         
-        # Render the current text_p1.
+        # Render the current text.
         txt_p1 = font_p1.render(text_p1, True, color_p1)
         txt_p2 = font_p2.render(text_p2, True, color_p2)
 
-        # Resize the box if the text_p1 is too long.
+        # Resize the box if the text is too long.
         p1_width = max(200, txt_p1.get_width() + 30)
         p2_width = max(200, txt_p2.get_width() + 30)
 
@@ -94,8 +112,21 @@ def main():
         pygame.draw.rect(screen, color_p1, p1_input_box, 4 if active_p1 else 2)
         pygame.draw.rect(screen, color_p2, p2_input_box, 4 if active_p2 else 2)
 
+        # Blit button
+        pygame.draw.rect(screen, GRAY, button)
+        pygame.draw.rect(screen, BLACK, button, 2)
+        screen.blit(txt_button, (button.centerx - int(txt_button.get_rect().width / 2), 310))
+        # Blit the main text
+        screen.blit(txt, (int(sw/2) - int(txt.get_rect().width / 2), 50))
+        if draw_line:
+            pygame.draw.line(screen, BLACK, [(int(sw/2) - int(txt.get_rect().width / 2) - 5), 90],
+                             [(int(sw/2) - int(txt.get_rect().width / 2) + 257), 90], 3)
+
         pygame.display.flip()
         clock.tick(30)
 
+    pygame.quit()
+
 
 main()
+

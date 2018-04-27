@@ -57,6 +57,7 @@ countdown_color_text = BLACK
 countdown_color_background = GRAY
 
 font_semibold_30 = pygame.font.SysFont("Lato Semibold", 30)
+font_semibold_24 = pygame.font.SysFont("Lato Semibold", 24)
 font_30 = pygame.font.SysFont("Lato", 30)
 font_bold_30 = pygame.font.SysFont("Lato Black", 30)
 
