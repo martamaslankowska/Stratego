@@ -1,13 +1,9 @@
 class Player:
-    number = 0
 
     def __init__(self, name, color):
         self.name = name
         self.color = color
         self.score = 0
-
-        self.nr = Player.number
-        Player.number += 1
 
 
 class ComputerPlayer(Player):

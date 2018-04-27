@@ -1,6 +1,7 @@
 import pygame
 from Game import *
 from Player import *
+from Field import *
 
 ''' Main python file in which all variables will be set '''
 ''' Used methods '''
@@ -40,7 +41,7 @@ COLORP2_LIGHT = (255, 128, 190)
 ''' Used variables '''
 n = 6
 field_size = 70
-panel_size = 400, 250
+panel_size = 400, 350
 matrix = init_matrix(n, field_size)
 board_margin = int(field_size/2)
 
