@@ -1,7 +1,17 @@
 import pygame
+pygame.init()
 from variables import *
 from Game import *
 import copy
+
+
+''' DRAW STARTING SCREEN
+'''
+
+
+def draw_starting_players():
+    pass
+
 
 ''' DRAW BOARD AND PANEL 
     draw_panel_line()
