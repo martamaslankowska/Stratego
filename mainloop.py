@@ -24,7 +24,7 @@ sec_counter = 0
 
 
 def starting_screen():
-    sw, sh = 500, 400
+    sw, sh = 600, 480
     loc_screen = pygame.display.set_mode((sw, sh))
     font_p1, font_p2 = font_30, font_30
     p1_input_box = pygame.Rect(loc_screen.get_rect().centerx - 100, 140, 200, 45)
@@ -45,7 +45,7 @@ def starting_screen():
 
     text = 'Enter player names and play!'
     text_button = 'start game'
-    button = pygame.Rect(loc_screen.get_rect().centerx - 85, 300, 170, 50)
+    button = pygame.Rect(loc_screen.get_rect().centerx - 85, 380, 170, 50)
     draw_line = False
 
     done = False
@@ -132,7 +132,8 @@ def starting_screen():
         # Blit button
         pygame.draw.rect(loc_screen, LIGHTGRAY, button)
         pygame.draw.rect(loc_screen, DARKGRAY, button, 3)
-        loc_screen.blit(txt_button, (button.centerx - int(txt_button.get_rect().width / 2), 310))
+        loc_screen.blit(txt_button, (button.centerx - int(txt_button.get_rect().width / 2), 390))
+
         # Blit the main text
         loc_screen.blit(txt, (int(sw / 2) - int(txt.get_rect().width / 2), 50))
         if draw_line:
@@ -161,7 +162,7 @@ def two_player_game(done, sec_counter, ses_time, previous_time, countdown, count
             if event.type == pygame.QUIT:  # If user clicked close
                 done = True  # Flag that we are done so we exit this loop
             if event.type == pygame.USEREVENT:
-                if game.empty_fields_left > 0:
+                if game.empty_fields_nr > 0:
                     previous_time = ses_time
                     ses_time, countdown = watch_session_time(ses_time, game.active_player)
                     sec_counter = 0
@@ -189,7 +190,7 @@ def two_player_game(done, sec_counter, ses_time, previous_time, countdown, count
         ap, s = text_plain()
         draw_players(ap, s)
 
-        if game.empty_fields_left == 0:
+        if game.empty_fields_nr == 0:
             draw_finishing_box()
 
         pygame.display.flip()

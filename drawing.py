@@ -106,6 +106,12 @@ def draw_finishing_box():
     screen.blit(winner, (local_x + int(local_width/2) - int(winner.get_rect().width/2), local_y + 35))
     screen.blit(score, (local_x + int(local_width/2) - int(score.get_rect().width/2), local_y+100))
 
+
+def draw_colors_to_pick():
+    pass
+
+
+def pick_a_color(active_p1, active_p2):
     pass
 
 

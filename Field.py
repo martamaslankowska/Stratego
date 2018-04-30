@@ -28,6 +28,9 @@ class Field:
         print("   X0: {0} \t|  X1: {1}".format(self.x_left, self.x_right))
         print("   Y0: {0} \t|  Y1: {1}".format(self.y_up, self.y_down))
 
+    def print_short(self):
+        print("({0}, {1}) - {2}".format(self.i, self.j, self.color))
+
     def print_neighbours(self):
         print("   neighbours")
         print("   {0} | {1} | {2}".format(self.n_lu, self.n_u, self.n_ru))

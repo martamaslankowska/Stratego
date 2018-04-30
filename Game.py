@@ -10,7 +10,8 @@ class Game:
         self.field_size = self.matrix[0][0].field_size
         self.active_player = self.players[0]
         self.next_player = self.players[1]
-        self.empty_fields_left = self.n*self.n
+        self.empty_fields = [obj for sublist in matrix for obj in sublist]
+        self.empty_fields_nr = len(self.empty_fields)
 
     def change_active_player(self):
         self.next_player = self.active_player
@@ -103,9 +104,17 @@ class Game:
     def field_and_player_change(self, field):
         self.active_player.score += self.count_score(field)
         self.change_active_player()
-        self.empty_fields_left -= 1
-        print(self.empty_fields_left)
+        self.remove_from_empty(field.i, field.j)
+        # print(self.empty_fields_nr, ":", self.empty_fields)
 
     def session_time_expired(self):
         self.active_player = self.next_player
         self.next_player = self.players[(self.players.index(self.next_player) + 1) % 2]
+
+    def remove_from_empty(self, i, j):
+        field = self.matrix[i][j]
+        # print('Field:', field)
+        # print(self.empty_fields)
+        # print('------------------------')
+        self.empty_fields.remove(field)
+        self.empty_fields_nr -= 1

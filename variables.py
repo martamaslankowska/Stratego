@@ -29,15 +29,30 @@ def init_matrix(n, field_size):
 ''' Colors '''
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
 GRAY = (128, 128, 128)
+
 LIGHTGRAY = (183, 183, 183)
 DARKGRAY = (91, 91, 91)
 COLORP1 = (30, 144, 255)
 COLORP1_LIGHT = (0, 191, 255)
 COLORP2 = (255, 75, 165)
 COLORP2_LIGHT = (255, 128, 190)
+
+# Colors for players to pick :)
+BLUE = (0, 128, 255)
+BLUE_LIGHT = (77, 166, 255)
+RED = (179, 0, 0)
+RED_LIGHT = (255, 26, 26)
+PINK = (230, 0, 115)
+PINK_LIGHT = (255, 77, 166)
+ORANGE = (255, 102, 0)
+ORANGE_LIGHT = (255, 133, 51)
+YELLOW = (255, 204, 0)
+YELLOW_LIGHT = (255, 214, 51)
+GREEN = (0, 204, 0)
+GREEN_LIGHT = (51, 255, 51)
+SEE = (0, 204, 153)
+SEE_LIGHT = (51, 255, 204)
 
 
 ''' Used variables '''
@@ -51,6 +66,7 @@ pygame.init()
 
 width, height = screen_size()
 screen = pygame.display.set_mode([width, height])
+# screen = pygame.display.get_surface()
 pygame.display.set_icon(pygame.image.load("images.png"))
 
 # countdown
@@ -70,8 +86,10 @@ font_semibold_48 = pygame.font.SysFont("Lato Semibold", 48)
 ''' Game variables '''
 
 player1 = Player("Marta", COLORP1)
-player2 = Player("Basia", COLORP2)
-session_time = 10
+# player2 = Player("Basia", COLORP2)
+player2 = ComputerPlayer("Comp", COLORP2)
+
+session_time = 30
 
 game = Game(matrix, player1, player2)
 
