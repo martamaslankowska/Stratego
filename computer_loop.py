@@ -49,19 +49,22 @@ while not done:
                     ses_time = copy.copy(session_time + 1)
 
 
-                    substates = [f.matrix for f in game.players[1].possible_children_states(copy.deepcopy(game))]
+                    # substates = [f.matrix for f in game.players[1].possible_children_states(copy.deepcopy(game), game.active_player)]
                     # for sub in substates:
-                    #     print('\n---------------------\n')
-                    #     for s in sub:
-                    #         for f in s:
-                    #             f.print_short()
-                            # f.print_cords()
+                        # print('\n---------------------\n')
+                        # for s in sub:
+                        #     for f in s:
+                        #         f.print_short()
+                        #     # f.print_cords()
 
+                    states = game.players[1].possible_children_states(copy.deepcopy(game), game.active_player)
+                    for s in states:
+                        print('Player 1:', s.players[0].score, ' |  Player 2:', s.players[1].score)
 
-                    print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\nEMPTY FIELDS\n')
-                    for ef in game.empty_fields:
-                        ef.print_short()
-                    print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+                    # print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\nEMPTY FIELDS\n')
+                    # for ef in game.empty_fields:
+                    #     ef.print_short()
+                    print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
 
 
 

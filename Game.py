@@ -10,7 +10,11 @@ class Game:
         self.field_size = self.matrix[0][0].field_size
         self.active_player = self.players[0]
         self.next_player = self.players[1]
-        self.empty_fields = [obj for sublist in matrix for obj in sublist]
+        self.empty_fields = [item for sublist in matrix for item in sublist]
+        # for i in range(self.n):
+        #     for j in range(self.n):
+        #         if matrix[i][j].color == WHITE:
+        #             self.empty_fields.append(matrix[i][j])
         self.empty_fields_nr = len(self.empty_fields)
 
     def change_active_player(self):
@@ -106,6 +110,7 @@ class Game:
         self.change_active_player()
         self.remove_from_empty(field.i, field.j)
         # print(self.empty_fields_nr, ":", self.empty_fields)
+
 
     def session_time_expired(self):
         self.active_player = self.next_player

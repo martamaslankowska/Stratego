@@ -85,14 +85,12 @@ font_semibold_48 = pygame.font.SysFont("Lato Semibold", 48)
 
 ''' Game variables '''
 
-player1 = Player("Marta", COLORP1)
+player1 = Player("Marta", COLORP1, 0)
 # player2 = Player("Basia", COLORP2)
-player2 = ComputerPlayer("Comp", COLORP2)
+player2 = ComputerPlayer("Comp", COLORP2, 1)
 
 session_time = 30
 
 game = Game(matrix, player1, player2)
-
-
 
 
