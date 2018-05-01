@@ -35,10 +35,10 @@ while not done:
 
     if type(game.active_player) is ComputerPlayer and game.empty_fields_nr > 0:
         computer_player = game.active_player
-        winning_game_state = computer_player.decision(copy.deepcopy(game), computer_player, 2)
-        print('\nScore difference:', winning_game_state.count_computer_score())
+        winning_game_state = computer_player.decision(copy.deepcopy(game), computer_player, 4)
+        print('\n---------------------------------------\nScore difference:', winning_game_state.count_computer_score())
         field = computer_player.get_changed_field(game, winning_game_state)
-        print('Computer pick: (', field.i, ',', field.j, ')\n----------------\n')
+        print('Computer pick: (', field.i, ',', field.j, ')\n---------------------------------------\n')
         game.matrix[field.i][field.j].color = computer_player.color
         game.field_and_player_change(game.matrix[field.i][field.j])
 
@@ -64,7 +64,7 @@ while not done:
                     game.field_and_player_change(field)
                     ses_time = copy.copy(session_time + 1)
 
-
+                    # game.print_matrix()
 
                     # substates = [f.matrix for f in game.players[1].possible_children_states(copy.deepcopy(game), game.active_player)]
                     # for sub in substates:

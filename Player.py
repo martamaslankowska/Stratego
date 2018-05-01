@@ -67,12 +67,17 @@ class ComputerPlayer(Player):
         if game_state.empty_fields_nr == 0:
             return game_state.count_computer_score()
         elif depth == 0:
+            print('Computer score:', game_state.count_computer_score(), '(having ({0}:{1})'.format(game_state.players[0].score, game_state.players[1].score))
+            game_state.print_matrix()
+            print()
             return game_state.count_computer_score()
         else:
             children, next_player = self.possible_children_states(game_state, active_player)
             if type(game_state.players[active_player.nr]) is ComputerPlayer:
+                print('--------- RETURN MAX ---------')
                 return max([self.minimax(x, next_player, depth-1) for x in children])
             else:
+                print('--------- RETURN MIN ---------')
                 return min([self.minimax(x, next_player, depth-1) for x in children])
 
     def decision(self, game_state, active_player, depth=10):
@@ -81,6 +86,7 @@ class ComputerPlayer(Player):
         for i in range(len(children)):
             f = self.get_changed_field(game_state, children[i])
             print('Children with field ({0}, {1}) - best score: {2}'.format(f.i, f.j, children[i].count_computer_score()))
+            print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         return best
 
     def get_changed_field(self, game, game_state):

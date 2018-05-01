@@ -128,3 +128,23 @@ class Game:
     ''' For Computer player - heuristic '''
     def count_computer_score(self):
         return self.players[1].score - self.players[0].score
+
+
+    def print_matrix(self):
+        for j in range(self.n + 1):
+            for i in range(self.n):
+                if j == 0:
+                    if i == 0:
+                        print('   ', end='')
+                    print(' {0} '.format(i), end='')
+                else:
+                    if i == 0:
+                        print(' {0} '.format(j-1), end='')
+                    if self.matrix[i][j-1].color == (30, 144, 255):
+                        print(' B ', end='')
+                    elif self.matrix[i][j-1].color == (255, 75, 165):
+                        print(' P ', end='')
+                    else:
+                        print(' - ', end='')
+            print()
+

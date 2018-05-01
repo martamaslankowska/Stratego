@@ -55,7 +55,7 @@ SEE = (0, 204, 153)
 SEE_LIGHT = (51, 255, 204)
 
 ''' Used variables '''
-n = 4
+n = 3
 field_size = 70
 panel_size = 400, 350
 matrix = init_matrix(n, field_size)
