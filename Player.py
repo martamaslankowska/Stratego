@@ -51,27 +51,41 @@ class ComputerPlayer(Player):
             #     for j in range(game_state.n):
             #         game_state.matrix[i][j].print_short()
 
-
             # for i in range(game_state.n):
             #     for j in range(game_state.n):
             #         game_state.matrix[i][j].print_short()
 
-            print('Active player SCORE:', game_state.next_player.score)
-            print('\n')
-        return list_of_states
+            # field.print_short()
+            # print('Player score after this move:', game_state.count_active_player_score_diff(active_player), '\n')
+
+        next_player = current_game.players[(active_player.nr+1)%2]
+        return list_of_states, next_player
 
 
 
     def minimax(self, game_state, active_player, depth):
         if game_state.empty_fields_nr == 0:
-            return game_state
+            return game_state.count_computer_score()
         elif depth == 0:
-            return game_state
+            return game_state.count_computer_score()
         else:
-            pass
-            # children = self.possible_children_states()
-            # if type(game_state.active_player) is ComputerPlayer:
-            #     return max([m.score for m in children])
-            # else:
-            #     return min([m.score for m in children])
+            children, next_player = self.possible_children_states(game_state, active_player)
+            if type(game_state.players[active_player.nr]) is ComputerPlayer:
+                return max([self.minimax(x, next_player, depth-1) for x in children])
+            else:
+                return min([self.minimax(x, next_player, depth-1) for x in children])
+
+    def decision(self, game_state, active_player, depth=10):
+        children, next_player = self.possible_children_states(game_state, active_player)
+        best = max(children, key=lambda x: self.minimax(x, next_player, depth))
+        for i in range(len(children)):
+            f = self.get_changed_field(game_state, children[i])
+            print('Children with field ({0}, {1}) - best score: {2}'.format(f.i, f.j, children[i].count_computer_score()))
+        return best
+
+    def get_changed_field(self, game, game_state):
+        for i in range(game.n):
+            for j in range(game.n):
+                if game.matrix[i][j].color != game_state.matrix[i][j].color:
+                    return game.matrix[i][j]
 

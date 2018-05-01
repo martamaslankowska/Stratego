@@ -31,6 +31,22 @@ while not done:
     sec_counter += 1
     screen.fill(WHITE)
 
+    ''' COMPUTER MOVE '''
+
+    if type(game.active_player) is ComputerPlayer and game.empty_fields_nr > 0:
+        computer_player = game.active_player
+        winning_game_state = computer_player.decision(copy.deepcopy(game), computer_player, 2)
+        print('\nScore difference:', winning_game_state.count_computer_score())
+        field = computer_player.get_changed_field(game, winning_game_state)
+        print('Computer pick: (', field.i, ',', field.j, ')\n----------------\n')
+        game.matrix[field.i][field.j].color = computer_player.color
+        game.field_and_player_change(game.matrix[field.i][field.j])
+
+        # for i in range(n):
+        #     for j in range(n):
+        #         matrix[i][j].print_short()
+
+
     x, y = pygame.mouse.get_pos()
 
     for event in pygame.event.get():  # User did something
@@ -49,6 +65,7 @@ while not done:
                     ses_time = copy.copy(session_time + 1)
 
 
+
                     # substates = [f.matrix for f in game.players[1].possible_children_states(copy.deepcopy(game), game.active_player)]
                     # for sub in substates:
                         # print('\n---------------------\n')
@@ -57,14 +74,15 @@ while not done:
                         #         f.print_short()
                         #     # f.print_cords()
 
-                    states = game.players[1].possible_children_states(copy.deepcopy(game), game.active_player)
-                    for s in states:
-                        print('Player 1:', s.players[0].score, ' |  Player 2:', s.players[1].score)
+                    # states = game.players[1].possible_children_states(copy.deepcopy(game), game.active_player)
+                    # for s in states:
+                    #     print('Player 1:', s.players[0].score, ' |  Player 2:', s.players[1].score)
+                        # print('Score difference -', s.count_active_player_score_diff(game.active_player), '\n')
 
                     # print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\nEMPTY FIELDS\n')
                     # for ef in game.empty_fields:
                     #     ef.print_short()
-                    print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
+                    # print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
 
 
 

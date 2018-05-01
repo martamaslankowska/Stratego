@@ -123,3 +123,8 @@ class Game:
         # print('------------------------')
         self.empty_fields.remove(field)
         self.empty_fields_nr -= 1
+
+
+    ''' For Computer player - heuristic '''
+    def count_computer_score(self):
+        return self.players[1].score - self.players[0].score
