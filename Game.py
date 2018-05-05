@@ -1,4 +1,5 @@
 WHITE = (255, 255, 255)
+import random
 
 
 class Game:
@@ -147,4 +148,24 @@ class Game:
                     else:
                         print(' - ', end='')
             print()
+
+
+    def get_depth(self):
+        if self.empty_fields_nr > 100:
+            return 0
+        if self.empty_fields_nr > 23:
+            return 1
+        elif self.empty_fields_nr > 12:
+            return 2
+        elif self.empty_fields_nr > 8:
+            return 3
+        elif self.empty_fields_nr > 7:
+            return 4
+        else:
+            return self.empty_fields_nr-1
+
+    def smart_random_field(self, possible_states):
+        # picks a field closest to the middle
+        return max(possible_states, key=lambda x: (int(x.count_computer_score()*5) - (abs(int(self.n/2) - self.players[1].get_changed_field(self, x).i))
+                                                   - (abs(int(self.n/2) - self.players[1].get_changed_field(self, x).j))))
 

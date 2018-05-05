@@ -187,8 +187,8 @@ def two_player_game(done, sec_counter, ses_time, previous_time, countdown, count
         text_countdown(countdown, count_color_text)
 
         # PANEL DRAWING
-        ap, s = text_plain()
-        draw_players(ap, s)
+        ap, s = text_plain(0)
+        draw_players(ap, s, 0)
 
         if game.empty_fields_nr == 0:
             draw_finishing_box()

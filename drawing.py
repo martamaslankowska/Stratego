@@ -27,38 +27,38 @@ def draw_board():
             pygame.draw.rect(screen, BLACK, [field.x_left, field.y_up, field_size, field_size], 2)
 
 
-def text_plain():
+def text_plain(move):
     txt = font_semibold_30.render("Active player", True, BLACK)
-    pos = width - panel_size[0] + 55, board_margin + 110
+    pos = width - panel_size[0] + 55, board_margin + 110 - move
     screen.blit(txt, pos)
     score = font_semibold_30.render("Score", True, BLACK)
-    pos_score = width - 45 - score.get_rect().centerx*2 - 17, board_margin + 110
+    pos_score = width - 45 - score.get_rect().centerx*2 - 17, board_margin + 110 - move
     screen.blit(score, pos_score)
     # pygame.draw.line(screen, GRAY, [width - 45 - score.get_rect().centerx*2 - 34, board_margin + 117],
     #                  [width - 45 - score.get_rect().centerx*2 - 34, board_margin + 142], 2)
     return txt, score
 
 
-def draw_players(txt, score):
-    pygame.draw.rect(screen, COLORP1_LIGHT, [width - panel_size[0] + 45, board_margin + 158, panel_size[0]-90, 50])
-    pygame.draw.rect(screen, COLORP2_LIGHT, [width - panel_size[0] + 45, board_margin + 215, panel_size[0]-90, 50])
+def draw_players(txt, score, move=0):
+    pygame.draw.rect(screen, COLORP1_LIGHT, [width - panel_size[0] + 45, board_margin + 158 - move, panel_size[0]-90, 50])
+    pygame.draw.rect(screen, COLORP2_LIGHT, [width - panel_size[0] + 45, board_margin + 215 - move, panel_size[0]-90, 50])
 
     # PLAYER NAMES
     pl1 = font_30.render(game.players[0].name, True, BLACK)
-    pos1 = width - panel_size[0] + 55 + txt.get_rect().centerx - pl1.get_rect().centerx, board_margin + 163
+    pos1 = width - panel_size[0] + 55 + txt.get_rect().centerx - pl1.get_rect().centerx, board_margin + 163 - move
     pl2 = font_30.render(game.players[1].name, True, BLACK)
-    pos2 = width - panel_size[0] + 55 + txt.get_rect().centerx - pl2.get_rect().centerx, board_margin + 220
+    pos2 = width - panel_size[0] + 55 + txt.get_rect().centerx - pl2.get_rect().centerx, board_margin + 220 - move
 
-    pygame.draw.line(screen, COLORP1, [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 165],
-                     [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 201], 2)
-    pygame.draw.line(screen, COLORP2, [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 222],
-                     [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 258], 2)
+    pygame.draw.line(screen, COLORP1, [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 165 - move],
+                     [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 201 - move], 2)
+    pygame.draw.line(screen, COLORP2, [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 222 - move],
+                     [width - 45 - score.get_rect().centerx * 2 - 34, board_margin + 258 - move], 2)
 
     # PLAYER SCORES
     pl1_score = font_30.render(str(game.players[0].score), True, BLACK)
-    pos1_score = width - 45 - score.get_rect().centerx*2 - 17 + score.get_rect().centerx - pl1_score.get_rect().centerx, board_margin + 163
+    pos1_score = width - 45 - score.get_rect().centerx*2 - 17 + score.get_rect().centerx - pl1_score.get_rect().centerx, board_margin + 163 - move
     pl2_score = font_30.render(str(game.players[1].score), True, BLACK)
-    pos2_score = width - 45 - score.get_rect().centerx*2 - 17 + score.get_rect().centerx - pl2_score.get_rect().centerx, board_margin + 220
+    pos2_score = width - 45 - score.get_rect().centerx*2 - 17 + score.get_rect().centerx - pl2_score.get_rect().centerx, board_margin + 220 - move
 
     pl1, pl2, pl1_score, pl2_score = draw_active_player(pl1, pl2, pl1_score, pl2_score)
 
