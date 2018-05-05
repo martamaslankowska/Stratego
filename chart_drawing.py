@@ -10,6 +10,9 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 
+COLORP1 = (30/255, 144/255, 255/255)
+COLORP2 = (255/255, 75/255, 165/255)
+
 
 def read_many_file_names(max_n):
     all_files = []
@@ -62,7 +65,7 @@ def draw_both_algorithm_chart(problem_type, files):
             score_list.append(score_list_i)
 
     # print(overall_time_list)
-    print(score_list)
+    # print(score_list)
 
 
     # DRAWING AVERAGE TIMES OF PLAYING
@@ -71,29 +74,41 @@ def draw_both_algorithm_chart(problem_type, files):
     x = n_list
     y1, e1 = zip(*overall_time_list)
     y1, e1 = list(y1), list(e1)
-    print(x, y1, e1)
 
-    ax.errorbar(x, y1, 1, ecolor='r', linestyle=':', color='b', marker='.')
+    ax.errorbar(x, y1, e1, ecolor='r', linestyle=':', color=COLORP1, marker='.')
+
     plt.xlabel('size of matrix N')
     plt.ylabel('time [seconds]')
-
     plt.title('Average time of game play having matrix NxN')
 
-    # plt.xticks(x_ax)  # forces x axis to show only integers
     plt.show()
-    plot_name = 'moj_wykresik.png'
+    plot_name = 'chaart_average_time_of_play.png'
     fig.savefig(plot_name)
+
+    # LOGARITHMIC SCALE (OF X AXIS)
+    fig, ax = plt.subplots()
+    ax.set_yscale("log", nonposy='clip')
+    ax.errorbar(x, y1, e1, ecolor='r', linestyle=':', color=COLORP1, marker='.')
+
+    plt.xlabel('size of matrix N')
+    plt.ylabel('time [seconds]')
+    plt.title('Average time of game play having matrix NxN\nwith logarithmic scale of x axis')
+
+    plt.show()
+    plot_name = 'chaart_average_time_of_play_log.png'
+    fig.savefig(plot_name)
+
 
 
     # DRAWING SCORE FOR A PLAY HAVING MATRIX N_xN (N_NUMBER GIVEN)
     fig, ax = plt.subplots()
-    n_number = 0
+    n_number = 7
 
     y2a = [i[0] for i in score_list[n_number]]
     y2b = [i[1] for i in score_list[n_number]]
     size = len(y2a)
-    plt.bar([(i + 1.2) for i in range(size)], y2a, width=0.4, label='random player')
-    plt.bar([(i + 0.8) for i in range(size)], y2b, width=0.4, label='computer player')
+    plt.bar([(i + 0.8) for i in range(size)], y2a, width=0.4, color=COLORP1, label='random player')
+    plt.bar([(i + 1.2) for i in range(size)], y2b, width=0.4, color=COLORP2, label='computer player')
 
     plt.xticks([(i+1) for i in range(size)])
     ax.legend(loc="upper left", shadow=True, title="Player", fancybox=True)
@@ -103,7 +118,36 @@ def draw_both_algorithm_chart(problem_type, files):
     plt.title('Scores of random and computer player for matrix {0}x{0}'.format(n_list[n_number]))
 
     plt.show()
+    plot_name = 'chaart_scores for matrix ' + str(n_list[n_number]) + 'x' + str(n_list[n_number]) + '.png'
+    fig.savefig(plot_name)
 
+
+
+    # DRAWING SCORES FOR ALL PLAYINGS
+    fig, ax = plt.subplots()
+    y3a, y3b = [], []
+
+    for score_n in score_list:
+        p1, p2 = 0, 0
+        for tup in score_n:
+            p1 += 1 if tup[0] > tup[1] else 0
+            p2 += 1 if tup[1] > tup[0] else 0
+        y3a.append(p1)
+        y3b.append(p2)
+
+    plt.bar([(i + 0.8 - 1) for i in n_list], y3a, width=0.4, color=COLORP1, label='random player')
+    plt.bar([(i + 1.2 - 1) for i in n_list], y3b, width=0.4, color=COLORP2, label='computer player')
+
+    plt.xticks(n_list)
+    ax.legend(loc="upper left", shadow=True, title="Player", fancybox=True)
+
+    plt.xlabel('matrix size n')
+    plt.ylabel('number of winnings')
+    plt.title('Number of winnings of random vs. computer player\nfor all matrix sizes')
+
+    plt.show()
+    plot_name = 'chaart_scores for all matrix.png'
+    fig.savefig(plot_name)
 
 
 all_files = read_many_file_names(11)
