@@ -168,7 +168,7 @@ def single_alpha_beta_play(screen, t):
         pygame.display.flip()
 
 
-def single_alpha_beta_play_statistics(screen, t):
+def single_alpha_beta_play_pruning(screen, t):
     global done
     ended = False
 
@@ -240,6 +240,105 @@ def single_alpha_beta_play_statistics(screen, t):
 
         pygame.display.flip()
 
+
+def single_minimax_minimax_play(screen, t):
+    global done
+    ended = False
+    sec_counter = 0
+
+    while not done:
+
+        # This limits the while loop to a max of n times per second.
+        clock.tick(30)
+        sec_counter += 1
+        screen.fill(WHITE)
+
+        ''' LAPTOP MOVE '''
+        if game.active_player.nr == 0 and game.empty_fields_nr > 0 and (sec_counter%12) == 0:
+            start = time.time()
+            depth = game.get_depth()
+            nr_of_operations = int(
+                math.factorial(game.empty_fields_nr) / math.factorial(game.empty_fields_nr - (depth + 1))) \
+                if game.empty_fields_nr > (depth + 1) else math.factorial(game.empty_fields_nr)
+
+            computer_player = game.active_player
+            winning_game_state, c = computer_player.decision_minimax(copy.deepcopy(game), computer_player, depth)
+
+            if depth < 2:
+                winning_game_state = game.smart_random_field(c)
+
+            field = computer_player.get_changed_field(game, winning_game_state)
+            game.matrix[field.i][field.j].color = computer_player.color
+            game.field_and_player_change(game.matrix[field.i][field.j])
+
+            end = time.time()
+            t += round(end - start, 3)
+            list_of_times.append(
+                str(round(end - start, 3)) + '\n' + str(nr_of_operations) + '\n' + str(depth + 1) + '\n')
+
+
+
+        ''' COMPUTER MOVE '''
+        if game.active_player.nr == 1 and game.empty_fields_nr > 0 and (sec_counter % 24) == 0:
+            start = time.time()
+            depth = game.get_depth()
+            nr_of_operations = int(
+                math.factorial(game.empty_fields_nr) / math.factorial(game.empty_fields_nr - (depth + 1))) \
+                if game.empty_fields_nr > (depth + 1) else math.factorial(game.empty_fields_nr)
+
+            computer_player = game.active_player
+            winning_game_state, c = computer_player.decision_minimax(copy.deepcopy(game), computer_player, depth)
+
+            if depth < 2:
+                winning_game_state = game.smart_random_field(c)
+
+            field = computer_player.get_changed_field(game, winning_game_state)
+            game.matrix[field.i][field.j].color = computer_player.color
+            game.field_and_player_change(game.matrix[field.i][field.j])
+
+            end = time.time()
+            t += round(end - start, 3)
+            list_of_times.append(
+                str(round(end - start, 3)) + '\n' + str(nr_of_operations) + '\n' + str(depth + 1) + '\n')
+
+
+
+        # ''' RANDOM PLAYER '''
+        # if type(game.active_player) is not ComputerPlayer and game.empty_fields_nr > 0:
+        #     f = random.choice(game.empty_fields)
+        #     field = game.field_color_change(int((f.x_left + f.x_right) / 2), int((f.y_up + f.y_down) / 2), board_margin)
+        #     game.field_and_player_change(field)
+
+        x, y = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():  # User did something
+            if event.type == pygame.QUIT:  # If user clicked close
+                done = True  # Flag that we are done so we exit this loop
+
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+            #     if event.button == 1:
+            #         field = game.field_color_change(x, y, board_margin)
+            #         if field is not None:
+            #             game.field_and_player_change(field)
+
+        # BOARD DRAWING
+        draw_panel_line()
+        draw_board()
+
+        # PANEL DRAWING
+        ap, s = text_plain(110)
+        draw_players(ap, s, 110)
+
+        # Finishing the game
+        if ended:
+            time.sleep(2)
+            done = True
+
+        if game.empty_fields_nr == 0:
+            draw_finishing_box()
+            ended = True
+
+        pygame.display.flip()
 
 
 def file_save_minimax_statistics(screen):
@@ -421,7 +520,16 @@ def file_save_alpha_beta_statistics(screen):
 
 
 # single_minimax_play(screen, t)
-single_alpha_beta_play(screen, t)
+# single_alpha_beta_play(screen, t)
 # single_alpha_beta_play_statistics(screen, t)
+single_minimax_minimax_play(screen, t)
+
+# if type(game.players[0]) is ComputerPlayer and type(game.players[1]) is ComputerPlayer:
+#     print('Minimax with minimax')
+#     single_minimax_minimax_play(screen, t)
+# else:
+#     print('Minimax with normal player')
+#     single_minimax_play(screen, t)
+
 
 pygame.quit()

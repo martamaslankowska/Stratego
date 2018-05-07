@@ -55,7 +55,7 @@ SEE = (0, 204, 153)
 SEE_LIGHT = (51, 255, 204)
 
 ''' Used variables '''
-n = 4
+n = 3
 field_size = 70
 panel_size = 400, 350
 matrix = init_matrix(n, field_size)
@@ -84,9 +84,10 @@ font_semibold_48 = pygame.font.SysFont("Lato Semibold", 48)
 
 ''' Game variables '''
 
-player1 = Player("Marta", COLORP1, 0)
-# player2 = Player("Basia", COLORP2)
-player2 = ComputerPlayer("Comp", COLORP2, 1)
+# player1 = Player("Marta", COLORP1, 0)
+player1 = ComputerPlayer("Laptop", COLORP1, 0)
+# player2 = Player("Basia", COLORP2, 1)
+player2 = ComputerPlayer("Computer", COLORP2, 1)
 
 session_time = 30
 

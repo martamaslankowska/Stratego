@@ -20,6 +20,8 @@ class Game:
 
     def change_active_player(self):
         self.next_player = self.active_player
+        # print('Active', self.active_player)
+        # print('Players (self)', self.players)
         self.active_player = self.players[(self.players.index(self.next_player)+1)%2]
         return self.active_player
 
@@ -129,6 +131,9 @@ class Game:
     ''' For Computer player - heuristic '''
     def count_computer_score(self):
         return self.players[1].score - self.players[0].score
+
+    def count_computer_vs_computer_score(self, active_player_nr):
+        return self.players[active_player_nr].score - self.players[(active_player_nr+1)%2].score
 
 
     def print_matrix(self):

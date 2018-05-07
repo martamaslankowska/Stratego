@@ -42,17 +42,17 @@ class ComputerPlayer(Player):
         return list_of_states, next_player
 
 
-    def minimax(self, game_state, active_player, depth):
+    def minimax(self, game_state, active_player, this_player_id, depth):
         if game_state.empty_fields_nr == 0:
-            return game_state.count_computer_score()
+            return game_state.count_computer_vs_computer_score(this_player_id)
         elif depth == 0:
-            return game_state.count_computer_score()
+            return game_state.count_computer_vs_computer_score(this_player_id)
         else:
             children, next_player = self.possible_children_states(game_state, active_player)
-            if type(game_state.players[active_player.nr]) is ComputerPlayer:
-                return min([self.minimax(x, next_player, depth-1) for x in children])
+            if active_player.nr == this_player_id:
+                return min([self.minimax(x, next_player, this_player_id, depth-1) for x in children])
             else:
-                return max([self.minimax(x, next_player, depth-1) for x in children])
+                return max([self.minimax(x, next_player, this_player_id, depth-1) for x in children])
 
 
     # returns computer score while playing
@@ -87,7 +87,7 @@ class ComputerPlayer(Player):
 
     def decision_minimax(self, game_state, active_player, depth=10):
         children, next_player = self.possible_children_states(game_state, active_player)
-        best = max(children, key=lambda x: self.minimax(x, next_player, depth))
+        best = max(children, key=lambda x: self.minimax(x, next_player, active_player.nr, depth))
         return best, children
 
 
