@@ -108,39 +108,46 @@ class ComputerPlayer(Player):
 
 
     # returns computer score and number of prunings while playing
+    # it really returns number of visited states
     def minimax_alpha_beta_statstics(self, game_state, active_player, depth, alpha, beta, prunings):
         if game_state.empty_fields_nr == 0:
+            prunings += 1
             return game_state.count_computer_score(), prunings
         elif depth == 0:
+            prunings += 1
             return game_state.count_computer_score(), prunings
         else:
             children, next_player = self.possible_children_states(game_state, active_player)
             if type(game_state.players[active_player.nr]) is ComputerPlayer:
                 value = -sys.maxsize
                 for child_state in children:
-                    value = max(value, self.minimax_alpha_beta(child_state, next_player, depth-1, alpha, beta, prunings)[0])
-                    alpha = max(alpha, value)
-                    if beta <= alpha:
-                        prunings += 1
-                        break
+                    minimax_res, prunings = self.minimax_alpha_beta_statstics(child_state, next_player, depth-1, alpha, beta, prunings)
+                    prunings += 1
+                    value = max(value, minimax_res)
+                    # alpha = max(alpha, value)
+                    # if beta <= alpha:
+                    #     print('There was a pruning! Beta cut off... O.O')
+                    #     break
                 return value, prunings
             else:
                 value = sys.maxsize
                 for child_state in children:
-                    value = min(value, self.minimax_alpha_beta(child_state, next_player, depth-1, alpha, beta, prunings)[0])
-                    beta = min(beta, value)
-                    if beta <= alpha:
-                        prunings += 1
-                        break
+                    minimax_res, prunings = self.minimax_alpha_beta_statstics(child_state, next_player, depth-1, alpha, beta, prunings)
+                    prunings += 1
+                    value = min(value, minimax_res)
+                    # beta = min(beta, value)
+                    # if beta <= alpha:
+                    #     print('There was a pruning! Alpha cut off... O.O')
+                    #     break
                 return value, prunings
 
     def decision_alpha_beta_statistics(self, game_state, active_player, depth=10):
         children, next_player = self.possible_children_states(game_state, active_player)
-        best_value, best_child = -sys.maxsize, children[0]
+        best_value, best_child, nr_of_nodes = -sys.maxsize, children[0], 0
         for child in children:
-            value = self.minimax_alpha_beta(child, next_player, depth, -sys.maxsize, sys.maxsize)
+            value, prunings = self.minimax_alpha_beta_statstics(child, next_player, depth, -sys.maxsize, sys.maxsize, 0)
             if value > best_value:
                 best_value = value
                 best_child = child
-        print('Martux best:', best_child, '\n')
-        return best_child, children
+                nr_of_nodes += prunings
+        return best_child, children, nr_of_nodes

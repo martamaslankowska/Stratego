@@ -219,7 +219,7 @@ def draw_both_algorithm_chart(files, files_ab):
             bbox=dict(boxstyle='round,pad=0.4', fc='yellow', alpha=0.5),
             arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0'))
 
-    plt.xlabel('number of operations')
+    plt.xlabel('number of possible game states')
     plt.ylabel('time [seconds]')
     plt.title('Average time of game play having matrix {0}x{0}\ndepending on minimax depth'.format(n_list[n_number]))
 
@@ -245,13 +245,16 @@ def draw_both_algorithm_chart(files, files_ab):
     y6, e6 = zip(*overall_time_list_ab)
     y6, e6 = list(y6), list(e6)
 
-    number_of_n = 3
+    number_of_n = 6
     if number_of_n > 0:
-        ax.errorbar(x5[:number_of_n], y5[:number_of_n], e5[:number_of_n], ecolor='b', linestyle=':', color=COLORP1, marker='.')
-        ax.errorbar(x6[:number_of_n], y6[:number_of_n], e6[:number_of_n], ecolor='m', linestyle=':', color=COLORP2, marker='.')
+        ax.errorbar(x5[:number_of_n], y5[:number_of_n], e5[:number_of_n], ecolor='b', linestyle=':', color=COLORP1, marker='.', label='minimax')
+        ax.errorbar(x6[:number_of_n], y6[:number_of_n], e6[:number_of_n], ecolor='m', linestyle=':', color=COLORP2, marker='.', label='alpha-beta')
+        plt.xticks(x5[:number_of_n])
     else:
-        ax.errorbar(x5, y5, e5, ecolor='b', linestyle=':', color=COLORP1, marker='.')
-        ax.errorbar(x6, y6, e6, ecolor='m', linestyle=':', color=COLORP2, marker='.')
+        ax.errorbar(x5, y5, e5, ecolor='b', linestyle=':', color=COLORP1, marker='.', label='minimax')
+        ax.errorbar(x6, y6, e6, ecolor='m', linestyle=':', color=COLORP2, marker='.', label='alpha-beta')
+
+    ax.legend(loc="upper left", shadow=True, title="Algorithm type", fancybox=True)
 
     plt.xlabel('size of matrix N')
     plt.ylabel('time [seconds]')
@@ -265,5 +268,5 @@ def draw_both_algorithm_chart(files, files_ab):
 
 
 all_files_minimax = read_many_file_names(11)
-all_files_alpha_beta = read_many_file_names_alpha_beta(4)
+all_files_alpha_beta = read_many_file_names_alpha_beta(11)
 draw_both_algorithm_chart(all_files_minimax, all_files_alpha_beta)
