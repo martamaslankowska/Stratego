@@ -14,10 +14,10 @@ COLORP1 = (30/255, 144/255, 255/255)
 COLORP2 = (255/255, 75/255, 165/255)
 
 
-def read_many_file_names(max_n):
+def read_many_file_names(max_n, file_name_beg):
     all_files = []
     for n_size in range(3, max_n+1):
-        file_names = 'times_n' + (('0' + str(n_size)) if n_size < 10 else str(n_size)) + '_nr...txt'
+        file_names = 'times_' + file_name_beg +'n' + (('0' + str(n_size)) if n_size < 10 else str(n_size)) + '_nr...txt'
         files = [f for f in os.listdir('.') if re.match(file_names, f)]
         files.insert(0, n_size)  # current n
         all_files.append(files)
@@ -34,12 +34,12 @@ def read_many_file_names_alpha_beta(max_n):
     return all_files  # list of lists
 
 
-def draw_both_algorithm_chart(files, files_ab):
+def draw_both_algorithm_chart(files, files_ab, files_comp):
 
-    n_list, n_list_ab = [], []  # list containing n_sizes
-    score_list, score_list_ab = [], []  # having [0]=n and later score of 1 player and score of second player
-    time_list, time_list_ab = [], []  # having [0]=n and than in i=depth having (time, std, nr_of_operations)
-    overall_time_list, overall_time_list_ab = [], []  # having [0]=n and later overall times
+    n_list, n_list_ab, n_list_comp = [], [], []  # list containing n_sizes
+    score_list, score_list_ab, score_list_comp = [], [], []  # having [0]=n and later score of 1 player and score of second player
+    time_list, time_list_ab, time_list_comp = [], [], []  # having [0]=n and than in i=depth having (time, std, nr_of_operations)
+    overall_time_list, overall_time_list_ab, overall_time_list_comp = [], [], []  # having [0]=n and later overall times
 
     for i in range(len(files)):
         many_files = files[i]
@@ -112,6 +112,42 @@ def draw_both_algorithm_chart(files, files_ab):
 
             overall_time_list_ab.append((np.average(overall_times), np.std(overall_times)))
             score_list_ab.append(score_list_i)
+
+    for i in range(len(files_comp)):
+        many_files = files_comp[i]
+        n_size_comp = many_files[0]
+        many_files = many_files[1:]
+
+        n_list_comp.append(n_size_comp)
+        time_list_comp.append([])
+
+        if len(many_files) > 0:
+            times, overall_times, score_list_i = [], [], []
+            operations, depth = [], []
+
+            for index, file_name in enumerate(many_files):
+                with open(file_name) as file123:
+                    f = [line.rstrip('\n') for line in file123]
+
+                if index == 0:
+                    operations = list(map(int, f[1:-3:3]))
+                    depth = list(map(int, f[2:-3:3]))
+                    times = [list(map(float, f[:-3:3]))]
+                else:
+                    times.append(list(map(float, f[:-3:3])))
+
+                overall_times.append(float(f[-3]))
+                score_list_i.append((int(f[-2]), int(f[-1])))
+
+            times = [val for sublist in times for val in sublist]
+
+            length = int(len(times) / len(many_files))
+            for t1 in range(length):
+                l = [x for x in times[t1::length]]
+                time_list_comp[i].append((np.average(l), np.std(l), operations[t1], depth[t1]))
+
+            overall_time_list_comp.append((np.average(overall_times), np.std(overall_times)))
+            score_list_comp.append(score_list_i)
 
     # print(overall_time_list_ab)
     # print(score_list_ab)
@@ -245,7 +281,7 @@ def draw_both_algorithm_chart(files, files_ab):
     y6, e6 = zip(*overall_time_list_ab)
     y6, e6 = list(y6), list(e6)
 
-    number_of_n = 6
+    number_of_n = 5
     if number_of_n > 0:
         ax.errorbar(x5[:number_of_n], y5[:number_of_n], e5[:number_of_n], ecolor='b', linestyle=':', color=COLORP1, marker='.', label='minimax')
         ax.errorbar(x6[:number_of_n], y6[:number_of_n], e6[:number_of_n], ecolor='m', linestyle=':', color=COLORP2, marker='.', label='alpha-beta')
@@ -266,7 +302,29 @@ def draw_both_algorithm_chart(files, files_ab):
 
 
 
+    # DRAWING SCORE FOR A 2-COMPUTER PLAY
+    fig, ax = plt.subplots()
 
-all_files_minimax = read_many_file_names(11)
-all_files_alpha_beta = read_many_file_names_alpha_beta(11)
-draw_both_algorithm_chart(all_files_minimax, all_files_alpha_beta)
+    y7a = [i[0][0] for i in score_list_comp]
+    y7b = [i[0][1] for i in score_list_comp]
+    size = len(y7a)
+
+    plt.bar([(i + 0.8) for i in range(size)], y7a, width=0.4, color=COLORP1, label='laptop')
+    plt.bar([(i + 1.2) for i in range(size)], y7b, width=0.4, color=COLORP2, label='computer')
+
+    plt.xticks([(i + 1) for i in range(size)])
+    ax.legend(loc="upper left", shadow=True, title="Player", fancybox=True)
+
+    plt.xlabel('size of matrix played')
+    plt.ylabel('score')
+    plt.title('Scores of laptop and computer player')
+
+    plt.show()
+    plot_name = 'chaart_scores_for_computer_players.png'
+    fig.savefig(plot_name)
+
+
+all_files_minimax = read_many_file_names(11, '')
+all_files_alpha_beta = read_many_file_names(11, 'ab_')
+all_files_comp = read_many_file_names(7, 'comp_')
+draw_both_algorithm_chart(all_files_minimax, all_files_alpha_beta, all_files_comp)

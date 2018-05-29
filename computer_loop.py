@@ -1,5 +1,6 @@
 import pygame
 from variables import *
+# from mainloop import *
 from drawing import *
 import copy
 import time
@@ -430,6 +431,115 @@ def file_save_minimax_statistics(screen):
                     file.write(i)
 
 
+def file_save_minimax_minimax_statistics(screen):
+    for matrix_dim in range(5, 12):
+        n = matrix_dim
+        for nr in range(1):
+
+            ''' INITIALIZE NEW GAME '''
+            done = False
+            matrix = init_matrix(n, field_size)
+            player1 = ComputerPlayer("Laptop", COLORP1, 0)
+            player2 = ComputerPlayer("Computer", COLORP2, 1)
+            game = Game(matrix, player1, player2)
+
+            ''' FILE SAVE - time and statistics'''
+            file_name = 'times_comp_n' + (('0' + str(matrix_dim)) if matrix_dim < 10 else str(matrix_dim)) \
+                        + '_nr' + (('0' + str(nr)) if nr < 10 else str(nr)) + '.txt'
+            list_of_times = []
+            t = 0
+
+            ended = False
+            sec_counter = 0
+
+            while not done:
+
+                # This limits the while loop to a max of n times per second.
+                clock.tick(30)
+                sec_counter += 1
+                screen.fill(WHITE)
+
+                ''' LAPTOP MOVE '''
+                if game.active_player.nr == 0 and game.empty_fields_nr > 0 and (sec_counter % 12) == 0:
+                    start = time.time()
+                    depth = game.get_depth()
+                    nr_of_operations = int(
+                        math.factorial(game.empty_fields_nr) / math.factorial(game.empty_fields_nr - (depth + 1))) \
+                        if game.empty_fields_nr > (depth + 1) else math.factorial(game.empty_fields_nr)
+
+                    computer_player = game.active_player
+                    winning_game_state, c = computer_player.decision_minimax(copy.deepcopy(game), computer_player,
+                                                                             depth)
+
+                    if depth < 2:
+                        winning_game_state = game.smart_random_field(c)
+
+                    field = computer_player.get_changed_field(game, winning_game_state)
+                    game.matrix[field.i][field.j].color = computer_player.color
+                    game.field_and_player_change(game.matrix[field.i][field.j])
+
+                    end = time.time()
+                    t += round(end - start, 3)
+                    list_of_times.append(
+                        str(round(end - start, 3)) + '\n' + str(nr_of_operations) + '\n' + str(depth + 1) + '\n')
+
+                ''' COMPUTER MOVE '''
+                if game.active_player.nr == 1 and game.empty_fields_nr > 0 and (sec_counter % 24) == 0:
+                    start = time.time()
+                    depth = game.get_depth()
+                    nr_of_operations = int(
+                        math.factorial(game.empty_fields_nr) / math.factorial(game.empty_fields_nr - (depth + 1))) \
+                        if game.empty_fields_nr > (depth + 1) else math.factorial(game.empty_fields_nr)
+
+                    computer_player = game.active_player
+                    winning_game_state, c = computer_player.decision_minimax(copy.deepcopy(game), computer_player,
+                                                                             depth)
+
+                    if depth < 2:
+                        winning_game_state = game.smart_random_field(c)
+
+                    field = computer_player.get_changed_field(game, winning_game_state)
+                    game.matrix[field.i][field.j].color = computer_player.color
+                    game.field_and_player_change(game.matrix[field.i][field.j])
+
+                    end = time.time()
+                    t += round(end - start, 3)
+                    list_of_times.append(
+                        str(round(end - start, 3)) + '\n' + str(nr_of_operations) + '\n' + str(depth + 1) + '\n')
+
+                x, y = pygame.mouse.get_pos()
+
+                for event in pygame.event.get():  # User did something
+                    if event.type == pygame.QUIT:  # If user clicked close
+                        done = True  # Flag that we are done so we exit this loop
+
+                # BOARD DRAWING
+                draw_panel_line()
+                draw_board()
+
+                # PANEL DRAWING
+                ap, s = text_plain(110)
+                draw_players(ap, s, 110)
+
+                # Finishing the game
+                if ended:
+                    time.sleep(2)
+                    done = True
+
+                if game.empty_fields_nr == 0:
+                    draw_finishing_box()
+                    ended = True
+
+                pygame.display.flip()
+
+            list_of_times.append(str(round(t, 3)) + '\n')
+            list_of_times.append(str(game.players[0].score) + '\n' + str(game.players[1].score))
+
+            with open(file_name, 'w') as file:
+                for i in list_of_times:
+                    file.write(i)
+
+
 def file_save_alpha_beta_statistics(screen):
     for matrix_dim in range(8, 12):
         n = matrix_dim
@@ -519,17 +629,26 @@ def file_save_alpha_beta_statistics(screen):
                     file.write(i)
 
 
-# single_minimax_play(screen, t)
+single_minimax_play(screen, t)
 # single_alpha_beta_play(screen, t)
 # single_alpha_beta_play_statistics(screen, t)
-single_minimax_minimax_play(screen, t)
+# single_minimax_minimax_play(screen, t)
+
+# file_save_minimax_minimax_statistics(screen)
+
 
 # if type(game.players[0]) is ComputerPlayer and type(game.players[1]) is ComputerPlayer:
 #     print('Minimax with minimax')
 #     single_minimax_minimax_play(screen, t)
+#     pygame.quit()
+# #
+# # elif type(game.players[0]) is Player and type(game.players[1]) is Player:
+# #     done_playing = set_player_names()
+# #     two_player_game(done_playing, sec_counter, ses_time, previous_time, countdown, count_color_text, count_color_back)
+#
 # else:
 #     print('Minimax with normal player')
 #     single_minimax_play(screen, t)
+#     pygame.quit()
 
 
-pygame.quit()
